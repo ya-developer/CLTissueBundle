@@ -3,7 +3,7 @@
 ## Scanning a file upload
 
 Let's assume you allow your users to upload files to your website. Odds are you want to be sure those files do not contain
-any malicious viruses so you want to scan those files before permanently storing them somewhere on your server.
+any viruses so you want to scan those files before permanently storing them somewhere on your server.
 
 Below is an example of what your action could look like if you used this bundle to scan the file(s):
 ```php
