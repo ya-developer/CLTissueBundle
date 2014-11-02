@@ -1,5 +1,11 @@
 inherit: true
 
+filter:
+  excluded_paths:
+    - "vendor/*"
+    - "Tests/*"
+    - "Exception/*"
+
 before_commands:
   - 'sudo composer self-update'
   - 'composer install --no-interaction --no-scripts'
@@ -7,7 +13,7 @@ before_commands:
 tools:
   php_code_sniffer:
     config:
-      standard: PSR4
+      standard: PSR2
   php_cpd: true
   php_cs_fixer:
     config:
@@ -16,9 +22,5 @@ tools:
   php_loc: true
   php_mess_detector: true
   php_pdepend: true
-  php_analyzer:
-    filter:
-      excluded_paths:
-        - 'Tests/*'
   sensiolabs_security_checker: true
   external_code_coverage: true
