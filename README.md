@@ -3,8 +3,8 @@
 A Symfony bundle that can scan your files for viruses using the [Tissue](https://github.com/cleentfaar/tissue) library and adapters.
 
 [![Build Status](https://secure.travis-ci.org/cleentfaar/CLTissueBundle.svg)](http://travis-ci.org/cleentfaar/CLTissueBundle)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/cleentfaar/tissue-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/cleentfaar/tissue-bundle/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/cleentfaar/tissue-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/cleentfaar/tissue-bundle/?branch=master)<br/>
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/cleentfaar/CLTissueBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/cleentfaar/CLTissueBundle/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/cleentfaar/CLTissueBundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/cleentfaar/CLTissueBundle/?branch=master)<br/>
 [![Latest Stable Version](https://poser.pugx.org/cleentfaar/tissue-bundle/v/stable.svg)](https://packagist.org/packages/cleentfaar/tissue-bundle)
 [![Total Downloads](https://poser.pugx.org/cleentfaar/tissue-bundle/downloads.svg)](https://packagist.org/packages/cleentfaar/tissue-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/cleentfaar/tissue-bundle/v/unstable.svg)](https://packagist.org/packages/cleentfaar/tissue-bundle)
