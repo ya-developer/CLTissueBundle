@@ -13,4 +13,4 @@ A Symfony bundle that can scan your files for viruses using the [Tissue](https:/
 ### Documentation
 
 - [Installation](Resources/doc/installation.md)
-- [Usage](Resources/doc/usage.md) (Coming soon!)
+- [Usage](Resources/doc/usage.md)
