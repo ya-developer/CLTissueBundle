@@ -2,7 +2,6 @@
 
 namespace CL\Bundle\TissueBundle\DependencyInjection;
 
-use CL\Germaphobe\Adapter\AdapterInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;

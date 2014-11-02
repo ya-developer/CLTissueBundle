@@ -14,10 +14,6 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('cl_tissue');
-        $rootNode
-            ->children()
-                ->scalarNode('scanner')->isRequired()->end()
-            ->end();
 
         return $treeBuilder;
     }
