@@ -5,6 +5,7 @@ filter:
     - "vendor/*"
     - "Tests/*"
     - "Exception/*"
+    - "DependencyInjection/*"
 
 before_commands:
   - 'sudo composer self-update'
