@@ -2,7 +2,7 @@
 
 A Symfony bundle that can scan your files for viruses using the [Tissue](https://github.com/cleentfaar/tissue) library and adapters.
 
-[![Build Status](https://secure.travis-ci.org/cleentfaar/tissue-bundle.svg)](http://travis-ci.org/cleentfaar/tissue-bundle)
+[![Build Status](https://secure.travis-ci.org/cleentfaar/CLTissueBundle.svg)](http://travis-ci.org/cleentfaar/CLTissueBundle)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/cleentfaar/tissue-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/cleentfaar/tissue-bundle/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/cleentfaar/tissue-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/cleentfaar/tissue-bundle/?branch=master)<br/>
 [![Latest Stable Version](https://poser.pugx.org/cleentfaar/tissue-bundle/v/stable.svg)](https://packagist.org/packages/cleentfaar/tissue-bundle)
