@@ -1,0 +1,10 @@
+parameters:
+  cl_tissue.validator.virus_free_file.class: CL\Bundle\TissueBundle\Validator\Constraints\VirusFreeFileValidator
+
+services:
+  cl_tissue.validator.virus_free_file:
+    class: %cl_tissue.validator.virus_free_file.class%
+    arguments:
+      - @cl_tissue.scanner
+    tags:
+      - { name: validator.constraint_validator, alias: virus_free_file }

@@ -1,0 +1,34 @@
+{
+  "name": "cleentfaar/tissue-bundle",
+  "description": "A Symfony bundle that let's you scan your files for viruses using the Tissue library",
+  "keywords": ["anti-virus", "security", "tissue", "virus"],
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Cas Leentfaar",
+      "homepage": "https://github.com/cleentfaar",
+      "email": "info@casleentfaar.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "symfony/framework-bundle": "~2.2",
+    "symfony/form": "~2.2",
+    "symfony/validator": "~2.2",
+    "cleentfaar/tissue": "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.2",
+    "matthiasnoback/symfony-config-test": "~0.2",
+    "matthiasnoback/symfony-dependency-injection-test": "~0.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "CL\\Bundle\\TissueBundle\\": ""
+    }
+  },
+  "config": {
+    "bin-dir": "bin"
+  }
+}
