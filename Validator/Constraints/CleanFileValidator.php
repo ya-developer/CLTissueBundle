@@ -39,7 +39,7 @@ class CleanFileValidator extends FileValidator
         $path = $value instanceof File ? $value->getPathname() : (string) $value;
         $clientFilename = $value instanceof UploadedFile ? $value->getClientOriginalName() : basename($path);
 
-        if ($constraint->restrictFilename && !preg_match('/^[a-zA-Z0-9._-]{2,250}\.[a-zA-Z]{2,4}$/', $clientFilename)) {
+        if ($constraint->restrictFilename && !preg_match($constraint->restrictFilenameRegex, $clientFilename)) {
             $this->buildViolation($constraint->invalidFilenameMessage)->addViolation();
 
             return;
