@@ -36,14 +36,6 @@ class CleanFileValidatorTest extends AbstractConstraintValidatorTest
         return new CleanFileValidator(new MockAdapter());
     }
 
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->cleanFile = AdapterTestCase::getPathToCleanFile();
-        $this->infectedFile = AdapterTestCase::getPathToInfectedFile();
-    }
-
     public function testNullIsValid()
     {
         $this->validator->validate(null, new CleanFile());
@@ -60,14 +52,14 @@ class CleanFileValidatorTest extends AbstractConstraintValidatorTest
 
     public function testCleanFileIsValid()
     {
-        $this->validator->validate($this->cleanFile, new CleanFile());
+        $this->validator->validate(AdapterTestCase::getPathToCleanFile(), new CleanFile());
 
         $this->assertNoViolation();
     }
 
     public function testInfectedFileIsInvalid()
     {
-        $this->validator->validate($this->infectedFile, new CleanFile());
+        $this->validator->validate(AdapterTestCase::getPathToInfectedFile(), new CleanFile());
 
         $this->buildViolation('This file contains a virus.')->assertRaised();
     }
