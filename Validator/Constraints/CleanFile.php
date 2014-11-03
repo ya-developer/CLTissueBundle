@@ -35,6 +35,6 @@ class CleanFile extends File
      */
     public function validatedBy()
     {
-        return 'virus_free_file';
+        return 'clean_file';
     }
 }
