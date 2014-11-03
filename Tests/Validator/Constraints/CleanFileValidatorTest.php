@@ -58,21 +58,21 @@ class CleanFileValidatorTest extends AbstractConstraintValidatorTest
         $this->assertNoViolation();
     }
 
-    public function testCleanFile()
+    public function testCleanFileIsValid()
     {
         $this->validator->validate($this->cleanFile, new CleanFile());
 
         $this->assertNoViolation();
     }
 
-    public function testVirusFile()
+    public function testInfectedFileIsInvalid()
     {
         $this->validator->validate($this->infectedFile, new CleanFile());
 
         $this->buildViolation('This file contains a virus.')->assertRaised();
     }
 
-    public function testInvalidFilename()
+    public function testMalformedFilenameIsInvalid()
     {
         $this->validator->validate('/path/to/some malformed^file*%.txt', new CleanFile(['restrictFilename' => true]));
 
