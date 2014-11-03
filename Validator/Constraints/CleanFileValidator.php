@@ -36,6 +36,10 @@ class CleanFileValidator extends FileValidator
             throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\VirusFreeFile');
         }
 
+        if (null === $value || '' === $value) {
+            return;
+        }
+
         $path = $value instanceof File ? $value->getPathname() : (string) $value;
         $clientFilename = $value instanceof UploadedFile ? $value->getClientOriginalName() : basename($path);
 
