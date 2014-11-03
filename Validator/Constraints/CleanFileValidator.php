@@ -4,6 +4,7 @@ namespace CL\Bundle\TissueBundle\Validator\Constraints;
 
 use CL\Tissue\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\FileValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -11,7 +12,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 /**
  * Validates whether a value is a valid file and does not contain any viruses
  */
-class VirusFreeFileValidator extends FileValidator
+class CleanFileValidator extends FileValidator
 {
     /**
      * @var AdapterInterface
@@ -31,11 +32,19 @@ class VirusFreeFileValidator extends FileValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!$constraint instanceof VirusFreeFile) {
+        if (!$constraint instanceof CleanFile) {
             throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\VirusFreeFile');
         }
 
         $path = $value instanceof File ? $value->getPathname() : (string) $value;
+        $clientFilename = $value instanceof UploadedFile ? $value->getClientOriginalName() : basename($path);
+
+        if ($constraint->restrictFilename && !preg_match('/^[a-zA-Z0-9._-]{2,250}\.[a-zA-Z]{2,4}$/', $clientFilename)) {
+            $this->buildViolation($constraint->invalidFilenameMessage)->addViolation();
+
+            return;
+        }
+
         if ($this->scanningAdapter->scan($path)->hasVirus()) {
             $this->buildViolation($constraint->virusDetectedMessage)->addViolation();
 

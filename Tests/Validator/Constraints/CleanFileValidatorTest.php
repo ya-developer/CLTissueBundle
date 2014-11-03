@@ -2,17 +2,17 @@
 
 namespace CL\Bundle\TissueBundle\Tests\Validator\Constraints;
 
-use CL\Bundle\TissueBundle\Validator\Constraints\VirusFreeFile;
-use CL\Bundle\TissueBundle\Validator\Constraints\VirusFreeFileValidator;
+use CL\Bundle\TissueBundle\Validator\Constraints\CleanFile;
+use CL\Bundle\TissueBundle\Validator\Constraints\CleanFileValidator;
 use CL\Tissue\Tests\Adapter\AdapterTestCase;
 use CL\Tissue\Tests\Adapter\MockAdapter;
 use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
 use Symfony\Component\Validator\Validation;
 
-class VirusFreeFileValidatorTest extends AbstractConstraintValidatorTest
+class CleanFileValidatorTest extends AbstractConstraintValidatorTest
 {
     /**
-     * @var VirusFreeFileValidator
+     * @var CleanFileValidator
      */
     protected $validator;
 
@@ -33,7 +33,7 @@ class VirusFreeFileValidatorTest extends AbstractConstraintValidatorTest
 
     protected function createValidator()
     {
-        return new VirusFreeFileValidator(new MockAdapter());
+        return new CleanFileValidator(new MockAdapter());
     }
 
     protected function setUp()
@@ -46,29 +46,36 @@ class VirusFreeFileValidatorTest extends AbstractConstraintValidatorTest
 
     public function testNullIsValid()
     {
-        $this->validator->validate(null, new VirusFreeFile());
+        $this->validator->validate(null, new CleanFile());
 
         $this->assertNoViolation();
     }
 
     public function testEmptyStringIsValid()
     {
-        $this->validator->validate('', new VirusFreeFile());
+        $this->validator->validate('', new CleanFile());
 
         $this->assertNoViolation();
     }
 
     public function testCleanFile()
     {
-        $this->validator->validate($this->cleanFile, new VirusFreeFile());
+        $this->validator->validate($this->cleanFile, new CleanFile());
 
         $this->assertNoViolation();
     }
 
     public function testVirusFile()
     {
-        $this->validator->validate($this->infectedFile, new VirusFreeFile());
+        $this->validator->validate($this->infectedFile, new CleanFile());
 
         $this->buildViolation('This file contains a virus.')->assertRaised();
+    }
+
+    public function testInvalidFilename()
+    {
+        $this->validator->validate('/path/to/some malformed^file*%.txt', new CleanFile(['restrictFilename' => true]));
+
+        $this->buildViolation('This file does not have a valid name.')->assertRaised();
     }
 }
