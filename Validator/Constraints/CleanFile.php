@@ -23,12 +23,12 @@ class CleanFile extends File
     /**
      * @var bool
      */
-    public $restrictFilename = false;
+    public $restrictedFilename = false;
 
     /**
      * @var string
      */
-    public $restrictFilenameRegex = '/^[a-zA-Z0-9._-]{2,250}\.[a-zA-Z]{2,4}$/';
+    public $restrictedFilenameRegex = '/^[a-zA-Z0-9._-]{2,250}\.[a-zA-Z]{3,4}$';
 
     /**
      * {@inheritdoc}
