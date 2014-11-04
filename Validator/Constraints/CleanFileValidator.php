@@ -41,9 +41,9 @@ class CleanFileValidator extends FileValidator
         }
 
         $path = $value instanceof File ? $value->getPathname() : (string) $value;
-        $clientFilename = $value instanceof UploadedFile ? $value->getClientOriginalName() : basename($path);
+        $clientFilename = $value instanceof UploadedFile ? $value->getClientOriginalName() : $path;
 
-        if ($constraint->restrictedFilename && !preg_match($constraint->restrictedFilenameRegex, $clientFilename)) {
+        if ($constraint->restrictedFilename && (stristr($clientFilename, '/') || !preg_match($constraint->restrictedFilenameRegex, $clientFilename))) {
             $this->buildViolation($constraint->invalidFilenameMessage)->addViolation();
 
             return;
@@ -58,6 +58,8 @@ class CleanFileValidator extends FileValidator
         // IMPORTANT: we do the regular file-validation AFTER scanning the file!
         // This is because the regular validation will access the (possibly infected) file to determine readability/information
         // and we obviously don't want that to happen if we are dealing with a virus.
-        parent::validate($value, $constraint);
+        if ($constraint->useParentValidation !== false) {
+            parent::validate($value, $constraint);
+        }
     }
 }

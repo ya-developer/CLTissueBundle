@@ -52,22 +52,60 @@ class CleanFileValidatorTest extends AbstractConstraintValidatorTest
 
     public function testCleanFileIsValid()
     {
-        $this->validator->validate(AdapterTestCase::getPathToCleanFile(), new CleanFile());
+        $this->validator->validate(AdapterTestCase::getPathToCleanFile(), new CleanFile(['useParentValidation' => false]));
 
         $this->assertNoViolation();
     }
 
     public function testInfectedFileIsInvalid()
     {
-        $this->validator->validate(AdapterTestCase::getPathToInfectedFile(), new CleanFile());
+        $this->validator->validate(AdapterTestCase::getPathToInfectedFile(), new CleanFile(['useParentValidation' => false]));
 
         $this->buildViolation('This file contains a virus.')->assertRaised();
     }
 
-    public function testMalformedFilenameIsInvalid()
+    /**
+     * @param string $invalidFilename
+     *
+     * @dataProvider getValidFilenames
+     */
+    public function testFilenameIsValid($invalidFilename)
     {
-        $this->validator->validate('/path/to/some malformed^file*%.txt', new CleanFile(['restrictFilename' => true]));
+        $this->validator->validate($invalidFilename, new CleanFile(['restrictedFilename' => true, 'useParentValidation' => false]));
+
+        $this->assertNoViolation();
+    }
+
+    /**
+     * @param string $invalidFilename
+     *
+     * @dataProvider getInvalidFilenames
+     */
+    public function testFilenameIsInvalid($invalidFilename)
+    {
+        $this->validator->validate($invalidFilename, new CleanFile(['restrictedFilename' => true, 'useParentValidation' => false]));
 
         $this->buildViolation('This file does not have a valid name.')->assertRaised();
+    }
+
+    /**
+     * @return array
+     */
+    public function getValidFilenames()
+    {
+        return [
+            ['A novel by Jöhn Døê.pdf'],
+            ['foobar.txt'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getInvalidFilenames()
+    {
+        return [
+            ['/path/to/novel.pdf'],
+        ];
     }
 }
