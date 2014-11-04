@@ -33,7 +33,7 @@ class CleanFileValidator extends FileValidator
     public function validate($value, Constraint $constraint)
     {
         if (!$constraint instanceof CleanFile) {
-            throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\VirusFreeFile');
+            throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\CleanFile');
         }
 
         if (null === $value || '' === $value) {
@@ -43,7 +43,7 @@ class CleanFileValidator extends FileValidator
         $path = $value instanceof File ? $value->getPathname() : (string) $value;
         $clientFilename = $value instanceof UploadedFile ? $value->getClientOriginalName() : basename($path);
 
-        if ($constraint->restrictFilename && !preg_match($constraint->restrictFilenameRegex, $clientFilename)) {
+        if ($constraint->restrictedFilename && !preg_match($constraint->restrictedFilenameRegex, $clientFilename)) {
             $this->buildViolation($constraint->invalidFilenameMessage)->addViolation();
 
             return;
