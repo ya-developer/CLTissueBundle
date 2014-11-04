@@ -28,7 +28,7 @@ class CleanFile extends File
     /**
      * @var string
      */
-    public $restrictedFilenameRegex = '/^[a-zA-Z0-9._-]{2,250}\.[a-zA-Z]{3,4}$';
+    public $restrictedFilenameRegex = '/^[a-zA-Z0-9._-]{2,250}\.[a-zA-Z]{3,4}$/';
 
     /**
      * {@inheritdoc}
