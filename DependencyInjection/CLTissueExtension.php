@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the CLTissueBundle.
+ *
+ * (c) Cas Leentfaar <info@casleentfaar.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace CL\Bundle\TissueBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,9 +24,21 @@ class CLTissueExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $config        = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader->load('adapters.yml');
+        $loader->load('validators.yml');
         $loader->load('services.yml');
+
+        $this->injectContainer($config, $container);
+    }
+
+    private function injectContainer(array $config, ContainerBuilder $container)
+    {
+        $container->setParameter('cl_tissue.chosen_adapter_alias', $config['adapter']['alias']);
+        foreach ($config['adapter']['options'] as $key => $value) {
+            $container->setParameter(sprintf('cl_tissue.adapter.%s.%s', $config['adapter']['alias'], $key), $value);
+        }
     }
 }

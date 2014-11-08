@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the CLTissueBundle.
+ *
+ * (c) Cas Leentfaar <info@casleentfaar.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace CL\Bundle\TissueBundle\Tests\Validator\Constraints;
 
 use CL\Bundle\TissueBundle\Validator\Constraints\CleanFile;
@@ -52,60 +61,15 @@ class CleanFileValidatorTest extends AbstractConstraintValidatorTest
 
     public function testCleanFileIsValid()
     {
-        $this->validator->validate(AdapterTestCase::getPathToCleanFile(), new CleanFile(['useParentValidation' => false]));
+        $this->validator->validate(AdapterTestCase::getPathToCleanFile(), new CleanFile());
 
         $this->assertNoViolation();
     }
 
     public function testInfectedFileIsInvalid()
     {
-        $this->validator->validate(AdapterTestCase::getPathToInfectedFile(), new CleanFile(['useParentValidation' => false]));
+        $this->validator->validate(AdapterTestCase::getPathToInfectedFile(), new CleanFile());
 
         $this->buildViolation('This file contains a virus.')->assertRaised();
-    }
-
-    /**
-     * @param string $invalidFilename
-     *
-     * @dataProvider getValidFilenames
-     */
-    public function testFilenameIsValid($invalidFilename)
-    {
-        $this->validator->validate($invalidFilename, new CleanFile(['restrictedFilename' => true, 'useParentValidation' => false]));
-
-        $this->assertNoViolation();
-    }
-
-    /**
-     * @param string $invalidFilename
-     *
-     * @dataProvider getInvalidFilenames
-     */
-    public function testFilenameIsInvalid($invalidFilename)
-    {
-        $this->validator->validate($invalidFilename, new CleanFile(['restrictedFilename' => true, 'useParentValidation' => false]));
-
-        $this->buildViolation('This file does not have a valid name.')->assertRaised();
-    }
-
-    /**
-     * @return array
-     */
-    public function getValidFilenames()
-    {
-        return [
-            ['A novel by Jöhn Døê.pdf'],
-            ['foobar.txt'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function getInvalidFilenames()
-    {
-        return [
-            ['/path/to/novel.pdf'],
-        ];
     }
 }

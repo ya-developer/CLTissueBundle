@@ -5,14 +5,15 @@
 Let's assume you allow your users to upload files to your website. Odds are you want to be sure those files do not contain
 any viruses so you want to scan those files before permanently storing them somewhere on your server.
 
-First we need a form that let's us process a file upload. If you created a separate `FormType` for it (good boy!), it  would look something like this:
+First we need a form that let's us process a file upload. If you created a separate `FormType` for it (good boy!),
+it would look something like this:
 
 ```php
 <?php
 
 namespace Acme\DemoBundle\Form\Type;
 
-use Symfony\Component\Validator\Constraints\File;
+use CL\Bundle\TissueBundle\Validator\Constraints\CleanFile;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -23,9 +24,9 @@ class DemoUploadType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('my_file_field', 'file', [
+        $builder->add('uploaded_file', 'file', [
             'constraints' => [
-                new File()
+                new CleanFile()
             ]
         ]);
     }
@@ -38,33 +39,21 @@ class DemoUploadType extends AbstractType
         return 'demo_upload';
     }
 }
-
-```
-
-Now, to have this upload scanned as well as be a valid file, you just need to replace the `File` constraint with this bundle's
- `VirusFreeFile`-constraint.
-```php
-<?php
-$builder->add('my_file_field', 'file', [
-    'constraints' => [
-        //new File()
-        new VirusFreeFile()
-    ]
-]);
 ```
 
 NOTE: I kept this form simple and added constraints directly, your application might have the constraints loaded from
-annotations in a related `data_class`.
+annotations in a related `data_class`, but in it works in a similar way.
 
 
 ### So what does the constraint do?
 
-During validation, the constraint will cause Tissue to first scan the uploaded file before passing it to it's parent's (`File`) constraint.
-If a virus is detected, processing is immmediately stopped and an error is raised. The scanner used for this detection
-is determined by which service you configured in the previous chapter.
+During validation, the constraint will cause the adapter you have configured to scan the uploaded file before passing it
+on to the inherited (`File`) constraint.
+If a virus is detected, further validation is stopped and an error is raised accordingly. If you set the option to do so,
+the uploaded file is also removed immediately.
 
 
-### Example of upload in a controller
+### Example of an upload in a controller
 
 Below is an example of what your action could look like if you used the form above to upload files:
 ```php
@@ -72,7 +61,8 @@ Below is an example of what your action could look like if you used the form abo
 
 namespace Acme\DemoBundle\Controller;
 
-// use ...
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class DemoController extends Controller
 {
@@ -82,15 +72,27 @@ class DemoController extends Controller
         $form = $this->createForm('...');
 
         $form->handleRequest($request);
-        if ($form->isValid()) {
-            // yay! the file contains no viruses (according to your scanner)!
-
+        if ($form->isSubmitted()) {
             // @var UploadedFile $uploadedFile
             $uploadedFile = $form->getData()['uploaded_file'];
+            if ($form->isValid()) {
+                // yay! the file contains no viruses (according to your scanner)!
 
-            // you probably have your own logic for processing uploads, this is just a simple example
-            $uploadedFile->move('/path/to/some/pretty/place', 'clean_file.txt');
+                // move the upload to some permanent storage?
+                $newFilename = uniqid();
+                $uploadedFile->move('/path/to/permanent/storage', $newFilename);
+
+                // ...perhaps store this new path somewhere in your database?
+            } else {
+                // hm something funny went on...?
+                // you'd be wise to remove this file now...
+                // NOTE: this is done automatically if you have set the option `autoRemove`
+                // to `true` in the field's `CleanFile` constraint
+                unlink($uploadedFile->getRealpath());
+            }
         }
+
+        // ...
     }
 }
 ```
@@ -98,8 +100,14 @@ class DemoController extends Controller
 
 ## IMPORTANT
 
-Although this should be enough to keep any evil-doers from uploading viruses to this particular form, you must keep in
-mind that there are many more ways to abuse uploads than just uploading a virus.
+**I highly recommend you to research the security issues involved before using any of these packages on a production server!**
+
+Although following these steps should be enough to keep most evil-doers from uploading infected files to your form,
+I can never give any 100% guarantee! You should take care in keeping your virus-scanner's signature database up-to-date,
+otherwise new viruses may get through. But you should also keep in mind that there are many more ways to abuse
+uploads than just uploading an infected file!
+
+**Make sure your application cannot be manipulated to execute any of the uploaded files! Not even those deemed 'clean'!**
 
 For instance, if you were to keep this file available within your web-directory after it has been uploaded, you better
 make sure that there is NO CHANCE that the file may get executed by your application in one way or another.

@@ -24,30 +24,7 @@ git submodule add https://github.com/cleentfaar/TissueBundle.git vendor/bundles/
 
 
 
-### Step 2) Get a virus-scanner
-
-This bundle integrates the Tissue library, adding a `VirusFreeFile`-constraint for your validation and an easy to use
-service to access your favorite virus scanner whenever you need to (`cl_tissue.scanner`).
-
-But since every environment may have different requirements on what anti-virus software is used, it's licenses, and how
-it is configured, this bundle does not force you to use a specific engine.
-
-In fact; the choice is up to you, as long as you are willing to make an adapter for it.
-
-To save you some headache however, the following adapters are already available for you to use:
-
-- [ClamAV](https://github.com/cleenfaar/tissue-clamav-adapter)
-- [ClamAV (PHP extension)](https://github.com/cleenfaar/tissue-phpclamav-adapter)
-
-Using one of these adapters is a matter of adding the requirement to your `composer.json`:
-```json
-    "require": {
-        "cleentfaar/tissue-clamav-adapter": "dev-master"
-    }
-```
-
-
-## Step 3) Register the namespaces (without composer)
+## Step 2) Register the namespaces (without composer)
 
 If you installed the bundle by composer, use the created autoload.php  (jump to step 3).
 Add the following two namespace entries to the `registerNamespaces` call in your autoloader:
@@ -84,25 +61,39 @@ public function registerBundles()
 ```
 
 
-## Step 5) Creating a service for your adapter
+## Step 5) Configure an adapter for your virus-scanner
 
-If you followed all the steps above, you will have included an adapter for the virus-scanner of your choice in your
-`composer.json`. But since Tissue cannot know the requirements of every adapter beforehand, you will need to create a
-service for your adapter first.
+As mentioned before, this bundle integrates the [Tissue](https://github.com/cleentfaar/tissue) library. To make it easy
+for you to get started on scanning files, I've also decided to include two adapters for you to pick from (`clamav` and `clamavphp`).
 
-Here's an example of a service that uses the [ClamAV](https://github.com/cleentfaar/tissue-clamav-adapter) adapter:
+To decide on which adapter to use, you have the following options:
+
+#### Option 1) Using the ClamAV adapter (easiest)
+The simplest option is to use the clamav adapter, this is the default configuration so there is nothing to configure!
+Obviously, it does require you to have the `clamav` and, if you don't do any further configuration, `clamav-daemon`
+packages installed. You can read more about these packages and how to install them in [the adapter's own installation documentation](https://github.com/cleentfaar/tissue-clamav-adapter/Resources/doc/installation.md).
+
+### Option 2) Using the ClamAVPHP adapter (little more work)
+If you want to use the `clamavphp` adapter, it's simply a matter of configuring the `adapter` option:
 ```yaml
-# Acme/DemoBundle/Resources/config/services.yml
-cl_tissue.scanner:
-    class: CL\Tissue\Adapter\ClamAV\ClamAVAdapter
-    arguments:
-        - /usr/bin/clamdscan
+# app/config.yaml
+cl_tissue:
+    adapter: clamavphp
 ```
+And that's it! Obviously, you need to make sure you have installed the `clamav` package and `clamav` PHP-extension before
+continuing. You can read more about these packages and how to install them in [the adapter's own installation documentation](https://github.com/cleentfaar/tissue-clamavphp-adapter/Resources/doc/installation.md).
 
-Note the name of this service; you should not change it. I am working on a way of making this more flexible but until
-that you will just have to stick with using this specific name.
-
-And that's it!
+### Using your own adapters (advanced)
+The [Tissue](https://github.com/cleentfaar/tissue) library that this bundle implements is highly abstracted, this means
+that if you have a different virusscanner installed on your server, you can just create your own adapter for it!
+To do this, you only need to create a service for your adapter and tag it with `cl_tissue.adapter`, as follows:
+```yaml
+acme.my_third_party_adapter:
+    class: Acme\Security\ThirdPartyAdapter
+    tags:
+      - { name: cl_tissue.adapter, alias: my_third_party }
+```
+Note the `alias` attribute, this is used to reference your scanner further on in your code.
 
 
 # Ready?

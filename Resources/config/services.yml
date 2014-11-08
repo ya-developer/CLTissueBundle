@@ -1,10 +1,12 @@
 parameters:
-  cl_tissue.validator.clean_file.class: CL\Bundle\TissueBundle\Validator\Constraints\CleanFileValidator
+  cl_tissue.adapter_registry.class: CL\Tissue\Adapter\AdapterRegistry
 
 services:
-  cl_tissue.validator.clean_file:
-    class: %cl_tissue.validator.clean_file.class%
+  cl_tissue.adapter_registry:
+    class: %cl_tissue.adapter_registry.class%
+
+  cl_tissue.scanner:
+    factory_service: cl_tissue.adapter_registry
+    factory_method: get
     arguments:
-      - @cl_tissue.scanner
-    tags:
-      - { name: validator.constraint_validator, alias: clean_file }
+      - %cl_tissue.chosen_adapter_alias%
