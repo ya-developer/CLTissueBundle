@@ -35,7 +35,7 @@ Well pictures say more than a thousand words right...
 **I highly recommend you to research the security issues involved before using any of these packages on a production server!**
 
 Although following the steps described in the documentation should be enough to keep most evil-doers from uploading infected
-files to your form, I can never give any 100% guarantee! You should take care in keeping your virus-scanner's signature
+files to your forms, I can never give any 100% guarantee! You should take care in keeping your virus-scanner's signature
 database up-to-date, otherwise new viruses may get through. You should also keep in mind that there are many more ways to
 abuse uploads than just uploading an infected file!
 
