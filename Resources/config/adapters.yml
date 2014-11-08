@@ -1,0 +1,16 @@
+parameters:
+  cl_tissue.adapter.clamav.class: CL\Tissue\Adapter\ClamAV\ClamAVAdapter
+  cl_tissue.adapter.clamavphp.class: CL\Tissue\Adapter\ClamAVPHP\ClamAVPHPAdapter
+
+services:
+  cl_tissue.adapter.clamav:
+    class: %cl_tissue.adapter.clamav.class%
+    arguments:
+      - %cl_tissue.adapter.clamav.bin%
+    tags:
+      - { name: cl_tissue.adapter, alias: clamav, owned: true }
+
+  cl_tissue.adapter.clamavphp:
+    class: %cl_tissue.adapter.clamavphp.class%
+    tags:
+      - { name: cl_tissue.adapter, alias: clamavphp, owned: true }

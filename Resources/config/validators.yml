@@ -1,0 +1,10 @@
+parameters:
+  cl_tissue.validator.clean_file.class: CL\Bundle\TissueBundle\Validator\Constraints\CleanFileValidator
+
+services:
+  cl_tissue.validator.clean_file:
+    class: %cl_tissue.validator.clean_file.class%
+    arguments:
+      - @cl_tissue.adapter_registry
+    tags:
+      - { name: validator.constraint_validator, alias: clean_file }
