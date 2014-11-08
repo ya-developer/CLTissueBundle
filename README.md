@@ -22,8 +22,8 @@ A Symfony bundle that can scan your files for viruses using the [Tissue](https:/
 
 Although following the steps described in the documentation should be enough to keep most evil-doers from uploading infected
 files to your form, I can never give any 100% guarantee! You should take care in keeping your virus-scanner's signature
-database up-to-date, otherwise new viruses may get through.
-But you should also keep in mind that there are many more ways to abuse uploads than just uploading an infected file!
+database up-to-date, otherwise new viruses may get through. You should also keep in mind that there are many more ways to
+abuse uploads than just uploading an infected file!
 
 **Make sure your application cannot be manipulated to execute any of the uploaded files! Not even those deemed 'clean'!**
 
@@ -33,5 +33,5 @@ make sure that there is **NO CHANCE** that the file may get executed by your app
 A malicious user could simply upload a piece of PHP-code (no virus!) that will open your application up to a huge range
 of leaks. Again, that's just one of the reasons that you should not solely rely on this package protecting your site!
 
-Again, read up on this subject before opening up your application to possible security leaks! I am not responsible for
-any damage done to your server or application while using this package!
+Read up on this subject before opening up your application to possible security leaks! **I am not responsible for
+any damage done to your server or application while using this package!**
