@@ -103,13 +103,19 @@ The [Tissue](https://github.com/cleentfaar/tissue) library that this bundle impl
 that if you have a different virusscanner installed on your server, you can just create your own adapter for it!
 To do this, you only need to create a service for your adapter and tag it with `cl_tissue.adapter`, as follows:
 ```yaml
-acme.my_third_party_adapter:
-    class: Acme\Security\ThirdPartyAdapter
+acme.tissue_adapter.my_cool_scanner:
+    class: Acme\Tissue\Adapter\MyCoolScannerAdapter
     tags:
-      - { name: cl_tissue.adapter, alias: my_third_party }
+      - { name: cl_tissue.adapter, alias: my_cool_scanner }
 ```
 Note the `alias` attribute, this is used to reference your scanner further on in your code.
+Having your adapter tagged like this, all that's left is to tell tissue to use for it's `cl_tissue.scanner` service:
 
+```yaml
+# app/config.yaml
+cl_tissue:
+    adapter: my_cool_scanner
+```
 
 # Ready?
 
