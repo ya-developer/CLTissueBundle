@@ -116,6 +116,8 @@ Having your adapter tagged like this, all that's left is to tell tissue to use f
 cl_tissue:
     adapter: my_cool_scanner
 ```
+For more information on creating your own adapters, check out the dedicated how-to documentation [Creating your own adapter](https://github.com/cleentfaar/tissue/Resources/doc/how-to/creating-your-own-adapter.md).
+
 
 # Ready?
 
