@@ -11,8 +11,12 @@
 
 namespace CL\Bundle\TissueBundle\DependencyInjection\Compiler;
 
+use CL\Tissue\Adapter\ClamAV\ClamAVAdapter;
+use CL\Tissue\Adapter\ClamAVPHP\ClamAVPHPAdapter;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 class RegisterAdaptersCompilerPass implements CompilerPassInterface
@@ -21,7 +25,18 @@ class RegisterAdaptersCompilerPass implements CompilerPassInterface
     {
         $registryDefinition = $container->getDefinition('cl_tissue.adapter_registry');
         $chosenAdapterAlias = $container->getParameter('cl_tissue.chosen_adapter_alias');
-        $preConfiguredAdapters = ['clamav', 'clamavphp'];
+        switch ($chosenAdapterAlias) {
+            case 'clamav':
+                $definition = $container->getDefinition('cl_tissue.adapter.clamav');
+                $definition->addTag('cl_tissue.adapter', ['alias' => 'clamav']);
+
+                break;
+            case 'clamavphp':
+                $definition = $container->getDefinition('cl_tissue.adapter.clamavphp');
+                $definition->addTag('cl_tissue.adapter', ['alias' => 'clamavphp']);
+
+                break;
+        }
 
         foreach ($container->findTaggedServiceIds('cl_tissue.adapter') as $id => $adapters) {
             foreach ($adapters as $adapter) {
@@ -29,13 +44,16 @@ class RegisterAdaptersCompilerPass implements CompilerPassInterface
                     throw new \InvalidArgumentException(sprintf('Services tagged with "cl_tissue.adapter" must define the "alias" attribute ("%s" does not have one).', $id));
                 }
 
-                if (isset($adapter['owned']) && $adapter['owned'] === true && $chosenAdapterAlias !== $adapter['alias']) {
-                    // not configured to be used
-                    continue;
+                if ($chosenAdapterAlias === $adapter['alias']) {
+                    $container->setDefinition('cl_tissue.scanner', $container->getDefinition($id));
                 }
 
                 $registryDefinition->addMethodCall('register', [new Reference($id), $adapter['alias']]);
             }
+        }
+
+        if (!$container->hasDefinition('cl_tissue.scanner')) {
+            throw new \RuntimeException('The scanner service has not been set yet');
         }
     }
 }

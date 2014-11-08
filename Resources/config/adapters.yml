@@ -7,10 +7,7 @@ services:
     class: %cl_tissue.adapter.clamav.class%
     arguments:
       - %cl_tissue.adapter.clamav.bin%
-    tags:
-      - { name: cl_tissue.adapter, alias: clamav, owned: true }
+      - %cl_tissue.adapter.clamav.database%
 
   cl_tissue.adapter.clamavphp:
     class: %cl_tissue.adapter.clamavphp.class%
-    tags:
-      - { name: cl_tissue.adapter, alias: clamavphp, owned: true }

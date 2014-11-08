@@ -10,13 +10,27 @@ A Symfony bundle that can scan your files for viruses using the [Tissue](https:/
 [![Latest Unstable Version](https://poser.pugx.org/cleentfaar/tissue-bundle/v/unstable.svg)](https://packagist.org/packages/cleentfaar/tissue-bundle)
 
 
+### What does this bundle do?
+
+Well pictures say more than a thousand words right...
+
+#### 1. You have a file-upload form...
+![1. You have a file-upload form...](Resources/doc/screens/upload1.png)
+
+#### 2. Someone tries to upload an infected file...
+![2. Someone tries to upload an infected file...](Resources/doc/screens/upload2.png)
+
+#### 3. The infected file gets rejected...
+![3. The infected file gets rejected...](Resources/doc/screens/upload3.png)
+
+
 ### Documentation
 
 - [Installation](Resources/doc/installation.md)
 - [Usage](Resources/doc/usage.md)
 
 
-### Important
+### WARNING
 
 **I highly recommend you to research the security issues involved before using any of these packages on a production server!**
 

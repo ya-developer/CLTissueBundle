@@ -42,7 +42,7 @@ class DemoUploadType extends AbstractType
 ```
 
 NOTE: I kept this form simple and added constraints directly, your application might have the constraints loaded from
-annotations in a related `data_class`, but in it works in a similar way.
+annotations in a related `data_class`, or you might not even use a form,  but it all works the same way.
 
 
 ### So what does the constraint do?
@@ -97,20 +97,22 @@ class DemoController extends Controller
                 // perhaps you should give them some (flash) success-message as well?
                 return $this->redirect($this->generateUrl('your_homepage_route'));
             } else {
-                // hm something funny went on...?
+                // hm something funny went on, the scanner seems to think the file is infected...
                 // you'd be wise to remove this file now...
-                unlink($uploadedFile->getRealpath());
+
+                // NOTE: we don't have to do this here because we configured the constraint
+                // with the `autoRemove`-option set to TRUE
+                //unlink($uploadedFile->getRealpath());
             }
         }
 
         // ...
 
-        return [
+        return $this->render('CLTissueDemoBundle:Demo:upload.html.twig', [
             'form' => $form->createView()
-        ];
+        ]);
     }
 }
-
 ```
 
 

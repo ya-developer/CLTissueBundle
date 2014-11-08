@@ -13,6 +13,7 @@ namespace CL\Bundle\TissueBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Configuration implements ConfigurationInterface
@@ -40,16 +41,42 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('adapter')
                     ->isRequired()
-                    ->children()
-                        ->scalarNode('alias')->isRequired()->defaultValue('clamav')->end()
-                        ->variableNode('options')->end()
-                        // ...
+                    ->beforeNormalization()
+                        ->ifNull()
+                        ->then(function($v) use ($self) {
+                            $retVal = ['alias' => 'clamav'];
+                            if ($resolver = $self->getResolver($retVal['alias'])) {
+                                $retVal['options'] = $resolver->resolve([]);
+                            }
+
+                            return $retVal;
+                        })
                     ->end()
                     ->beforeNormalization()
                         ->ifString()
                         ->then(function($v) use ($self) {
-                            return ['alias'=> $v, 'options' => $self->getResolver('clamav')->resolve([])];
+                            $retVal = ['alias' => $v];
+                            if ($resolver = $self->getResolver($retVal['alias'])) {
+                                $retVal['options'] = $resolver->resolve([]);
+                            }
+
+                            return $retVal;
                         })
+                    ->end()
+                    ->validate()
+                        ->ifArray()
+                        ->then(function ($v) {
+                            if ($v['alias'] === 'clamavphp' && !class_exists('\CL\Tissue\Adapter\ClamAVPHP\ClamAVPHPAdapter')) {
+                                throw new InvalidConfigurationException('If you want to use the `clamavphp` adapter, you need to add the `cleentfaar/tissue-clamavphp-adapter` package to your composer.json');
+                            }
+
+                            return $v;
+                        })
+                    ->end()
+                    ->children()
+                        ->scalarNode('alias')->isRequired()->defaultValue('clamav')->end()
+                        ->variableNode('options')->defaultValue([])->end()
+                        // ...
                     ->end()
                 ->end()
             ->end()
