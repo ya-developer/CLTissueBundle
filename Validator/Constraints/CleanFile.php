@@ -51,4 +51,12 @@ class CleanFile extends File
     {
         return 'clean_file';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOption()
+    {
+        return 'autoRemove';
+    }
 }

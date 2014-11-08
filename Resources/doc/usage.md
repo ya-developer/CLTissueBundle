@@ -26,7 +26,7 @@ class DemoUploadType extends AbstractType
     {
         $builder->add('uploaded_file', 'file', [
             'constraints' => [
-                new CleanFile()
+                new CleanFile(true) // the default option is 'autoRemove', here we set it to true
             ]
         ]);
     }
@@ -61,7 +61,6 @@ Below is an example of what your action could look like if you used the form abo
 
 namespace CL\Bundle\TissueDemoBundle\Controller;
 
-use CL\Bundle\TissueDemoBundle\Entity\Media;
 use CL\Bundle\TissueDemoBundle\Form\Type\DemoUploadType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -78,24 +77,25 @@ class DemoController extends Controller
             $uploadedFile = $form->getData()['uploaded_file'];
             if ($form->isValid()) {
                 // if we reached this point the file seems to be clean (according to your scanner)!
-
-                // move the upload to some permanent storage?
-                $permanentDir = '/path/to/permanent/storage';
-                $uploadedFile->move($permanentDir, uniqid());
-                $newLocation = $uploadedFile->getRealPath();
+                // so maybe move the upload to some permanent storage?
+                //
+                // $permanentDir = '/path/to/permanent/storage';
+                // $uploadedFile->move($permanentDir, uniqid());
+                // $newLocation = $uploadedFile->getRealPath();
 
                 // perhaps store this file's location somewhere in your database?
                 // this example uses an entity you might have that represents a file/media
-                $mediaEntity = new Media();
-                $mediaEntity->setLocation($newLocation);
+                //
+                // $mediaEntity = new Media();
+                // $mediaEntity->setLocation($newLocation);
+                //
+                // $em = $this->getDoctrine()->getManager();
+                // $em->persist($mediaEntity);
+                // $em->flush($mediaEntity);
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($mediaEntity);
-                $em->flush($mediaEntity);
-
-                // redirect the user away from here
+                // we're done, let's redirect the user away from here
                 // perhaps you should give them some (flash) success-message as well?
-                return $this->redirect($this->generateUrl('your_homepage_route'));
+                return $this->redirect($this->generateUrl('cl_tissue_demo_upload_success'));
             } else {
                 // hm something funny went on, the scanner seems to think the file is infected...
                 // you'd be wise to remove this file now...
@@ -106,11 +106,15 @@ class DemoController extends Controller
             }
         }
 
-        // ...
-
+        // render the form, along with any validation errors that may have been raised
         return $this->render('CLTissueDemoBundle:Demo:upload.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    public function successAction()
+    {
+        return $this->render('CLTissueDemoBundle:Demo:success.html.twig');
     }
 }
 ```
