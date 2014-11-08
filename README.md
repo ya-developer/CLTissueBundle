@@ -26,11 +26,13 @@ for more information).
 ##### 1. You have a file-upload form...
 ![1. You have a file-upload form...](Resources/doc/screens/upload1.png)
 
-##### 2. Someone tries to upload an infected file...
+##### 3. Someone tries to upload an infected file...
 ![2. Someone tries to upload an infected file...](Resources/doc/screens/upload2.png)
 
 ##### 3. The infected file gets rejected...
 ![3. The infected file gets rejected...](Resources/doc/screens/upload3.png)
+
+Please be sure to read the [usage documentation](Resources/doc/usage.md) if you are planning on actually using this bundle!
 
 
 ### Documentation
