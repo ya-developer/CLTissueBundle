@@ -1,7 +1,7 @@
 {
   "name": "cleentfaar/tissue-bundle",
   "description": "A Symfony bundle that let's you scan your files for viruses using the Tissue library",
-  "keywords": ["anti-virus", "security", "tissue", "virus"],
+  "keywords": ["anti-virus", "security", "tissue", "virus", "clamav"],
   "type": "symfony-bundle",
   "license": "MIT",
   "authors": [
@@ -14,6 +14,7 @@
   "require": {
     "php": ">=5.4",
     "symfony/framework-bundle": "~2.2",
+    "symfony/options-resolver": "~2.2",
     "symfony/validator": "~2.2",
     "cleentfaar/tissue": "dev-master",
     "cleentfaar/tissue-clamav-adapter": "dev-master",

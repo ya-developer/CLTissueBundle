@@ -31,11 +31,19 @@ class CLTissueExtension extends Extension
         $loader->load('validators.yml');
         $loader->load('services.yml');
 
-        $this->injectContainer($config, $container);
+        $this->setParameters($config, $container);
     }
 
-    private function injectContainer(array $config, ContainerBuilder $container)
+    /**
+     * @param array            $config
+     * @param ContainerBuilder $container
+     */
+    private function setParameters(array $config, ContainerBuilder $container)
     {
+        if (!array_key_exists('adapter', $config)) {
+            $config['adapter'] = ['alias' => 'clamav', 'options' => []];
+        }
+
         $container->setParameter('cl_tissue.chosen_adapter_alias', $config['adapter']['alias']);
         foreach ($config['adapter']['options'] as $key => $value) {
             $container->setParameter(sprintf('cl_tissue.adapter.%s.%s', $config['adapter']['alias'], $key), $value);

@@ -68,12 +68,27 @@ for you to get started on scanning files, I've also decided to include two adapt
 
 To decide on which adapter to use, you have the following options:
 
-#### Option 1) Using the ClamAV adapter (easiest)
-The simplest option is to use the clamav adapter, this is the default configuration so there is nothing to configure!
+#### Option 1) Using the ClamAV adapter
+The simplest option is to use the clamav adapter, this is the default configuration:
+```yaml
+# app/config.yaml
+cl_tissue:
+    adapter: ~ # defaults to 'clamav'
+```
 Obviously, it does require you to have the `clamav` and, if you don't do any further configuration, `clamav-daemon`
 packages installed. You can read more about these packages and how to install them in [the adapter's own installation documentation](https://github.com/cleentfaar/tissue-clamav-adapter/Resources/doc/installation.md).
+This was just a short example; you could configure more options like the path to binary used and path to the signature-database to use:
+```yaml
+# app/config.yaml
+cl_tissue:
+    adapter:
+        alias: clamav
+        options:
+            bin: /usr/bin/clamdscan # default
+            database: /path/to/signature/database # defaults to NULL
+```
 
-### Option 2) Using the ClamAVPHP adapter (little more work)
+### Option 2) Using the ClamAVPHP adapter
 If you want to use the `clamavphp` adapter, it's simply a matter of configuring the `adapter` option:
 ```yaml
 # app/config.yaml
@@ -83,7 +98,7 @@ cl_tissue:
 And that's it! Obviously, you need to make sure you have installed the `clamav` package and `clamav` PHP-extension before
 continuing. You can read more about these packages and how to install them in [the adapter's own installation documentation](https://github.com/cleentfaar/tissue-clamavphp-adapter/Resources/doc/installation.md).
 
-### Using your own adapters (advanced)
+### Option 3) Using your own adapter (advanced)
 The [Tissue](https://github.com/cleentfaar/tissue) library that this bundle implements is highly abstracted, this means
 that if you have a different virusscanner installed on your server, you can just create your own adapter for it!
 To do this, you only need to create a service for your adapter and tag it with `cl_tissue.adapter`, as follows:

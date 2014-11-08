@@ -37,6 +37,7 @@ class Configuration implements ConfigurationInterface
         $self = $this;
 
         $rootNode
+            ->addDefaultsIfNotSet()
             ->children()
                 ->arrayNode('adapter')
                     ->isRequired()
@@ -60,12 +61,12 @@ class Configuration implements ConfigurationInterface
                         })
                     ->end()
                     ->children()
-                        ->scalarNode('alias')->isRequired()->end()
-                        ->variableNode('options')->isRequired()->end()
+                        ->scalarNode('alias')->isRequired()->defaultValue('clamav')->end()
+                        ->variableNode('options')->defaultValue([])->end()
                     ->end()
                 ->end()
             ->end()
-            ->end();
+        ->end();
 
         return $tb;
     }
@@ -82,28 +83,33 @@ class Configuration implements ConfigurationInterface
         }
 
         if (!isset($this->resolvers[$alias])) {
-            $resolver = new OptionsResolver();
-            switch ($alias) {
-                case 'clamav':
-                    $resolver->setDefaults([
-                        'bin' => '/usr/bin/clamdscan',
-                        'database' => null,
-                    ]);
-                    $resolver->setOptional([
-                        'database',
-                    ]);
-                    $resolver->setAllowedTypes([
-                        'bin' => ['string'],
-                        'database' => ['string', 'null'],
-                    ]);
-                    break;
-                default:
-                    break;
-            }
-
-            $this->resolvers[$alias] = $resolver;
+            $this->resolvers[$alias] = $this->createResolver($alias);
         }
 
         return $this->resolvers[$alias];
+    }
+
+    private function createResolver($alias)
+    {
+        $resolver = new OptionsResolver();
+        switch ($alias) {
+            case 'clamav':
+                $resolver->setDefaults([
+                    'bin' => '/usr/bin/clamdscan',
+                    'database' => null,
+                ]);
+                $resolver->setOptional([
+                    'database',
+                ]);
+                $resolver->setAllowedTypes([
+                    'bin' => ['string'],
+                    'database' => ['string', 'null'],
+                ]);
+                break;
+            default:
+                break;
+        }
+
+        return $resolver;
     }
 }
