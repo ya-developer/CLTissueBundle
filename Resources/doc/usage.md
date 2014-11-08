@@ -11,7 +11,7 @@ it would look something like this:
 ```php
 <?php
 
-namespace Acme\DemoBundle\Form\Type;
+namespace CL\Bundle\TissueDemoBundle\Form\Type;
 
 use CL\Bundle\TissueBundle\Validator\Constraints\CleanFile;
 use Symfony\Component\Form\AbstractType;
@@ -59,42 +59,58 @@ Below is an example of what your action could look like if you used the form abo
 ```php
 <?php
 
-namespace Acme\DemoBundle\Controller;
+namespace CL\Bundle\TissueDemoBundle\Controller;
 
+use CL\Bundle\TissueDemoBundle\Entity\Media;
+use CL\Bundle\TissueDemoBundle\Form\Type\DemoUploadType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 class DemoController extends Controller
 {
     public function uploadAction(Request $request)
     {
-        // let's say you have created a form with a field of the type 'file' in it
-        $form = $this->createForm('...');
-
+        $form = $this->createForm(new DemoUploadType());
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
-            // @var UploadedFile $uploadedFile
+            /** @var UploadedFile $uploadedFile */
             $uploadedFile = $form->getData()['uploaded_file'];
             if ($form->isValid()) {
-                // yay! the file contains no viruses (according to your scanner)!
+                // if we reached this point the file seems to be clean (according to your scanner)!
 
                 // move the upload to some permanent storage?
-                $newFilename = uniqid();
-                $uploadedFile->move('/path/to/permanent/storage', $newFilename);
+                $permanentDir = '/path/to/permanent/storage';
+                $uploadedFile->move($permanentDir, uniqid());
+                $newLocation = $uploadedFile->getRealPath();
 
-                // ...perhaps store this new path somewhere in your database?
+                // perhaps store this file's location somewhere in your database?
+                // this example uses an entity you might have that represents a file/media
+                $mediaEntity = new Media();
+                $mediaEntity->setLocation($newLocation);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($mediaEntity);
+                $em->flush($mediaEntity);
+
+                // redirect the user away from here
+                // perhaps you should give them some (flash) success-message as well?
+                return $this->redirect($this->generateUrl('your_homepage_route'));
             } else {
                 // hm something funny went on...?
                 // you'd be wise to remove this file now...
-                // NOTE: this is done automatically if you have set the option `autoRemove`
-                // to `true` in the field's `CleanFile` constraint
                 unlink($uploadedFile->getRealpath());
             }
         }
 
         // ...
+
+        return [
+            'form' => $form->createView()
+        ];
     }
 }
+
 ```
 
 

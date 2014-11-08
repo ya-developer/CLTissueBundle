@@ -33,40 +33,27 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $tb = new TreeBuilder();
-        $rootNode = $tb->root('cl_tissue');
         $self = $this;
+        $rootNode = $tb->root('cl_tissue');
 
         $rootNode
-            ->addDefaultsIfNotSet()
             ->children()
                 ->arrayNode('adapter')
                     ->isRequired()
-                    ->beforeNormalization()
-                        ->ifString(function ($v) { return $v; })
-                        ->then(function ($v) use ($self) {
-                            $v = ['alias' => $v, 'options' => []];
-                            if ($resolver = $self->getResolver($v['alias'])) {
-                                $v['options'] = $resolver->resolve([]);
-                            }
-
-                            return $v;
-                        })
-                        ->ifArray(function ($v) { return $v; })
-                        ->then(function ($v) use ($self) {
-                            if ($resolver = $self->getResolver($v['alias'])) {
-                                $v['options'] = $resolver->resolve($v['options']);
-                            }
-
-                            return $v;
-                        })
-                    ->end()
                     ->children()
                         ->scalarNode('alias')->isRequired()->defaultValue('clamav')->end()
-                        ->variableNode('options')->defaultValue([])->end()
+                        ->variableNode('options')->end()
+                        // ...
+                    ->end()
+                    ->beforeNormalization()
+                        ->ifString()
+                        ->then(function($v) use ($self) {
+                            return ['alias'=> $v, 'options' => $self->getResolver('clamav')->resolve([])];
+                        })
                     ->end()
                 ->end()
             ->end()
-        ->end();
+        ;
 
         return $tb;
     }
@@ -94,6 +81,9 @@ class Configuration implements ConfigurationInterface
         $resolver = new OptionsResolver();
         switch ($alias) {
             case 'clamav':
+                $resolver->setRequired([
+                    'bin'
+                ]);
                 $resolver->setDefaults([
                     'bin' => '/usr/bin/clamdscan',
                     'database' => null,

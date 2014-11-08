@@ -73,7 +73,7 @@ The simplest option is to use the clamav adapter, this is the default configurat
 ```yaml
 # app/config.yaml
 cl_tissue:
-    adapter: ~ # defaults to 'clamav'
+    adapter: clamav
 ```
 Obviously, it does require you to have the `clamav` and, if you don't do any further configuration, `clamav-daemon`
 packages installed. You can read more about these packages and how to install them in [the adapter's own installation documentation](https://github.com/cleentfaar/tissue-clamav-adapter/Resources/doc/installation.md).

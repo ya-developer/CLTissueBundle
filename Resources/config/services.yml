@@ -1,11 +1,13 @@
 parameters:
   cl_tissue.adapter_registry.class: CL\Tissue\Adapter\AdapterRegistry
+  cl_tissue.adapter.class: CL\Tissue\Adapter\AbstractAdapter
 
 services:
   cl_tissue.adapter_registry:
     class: %cl_tissue.adapter_registry.class%
 
   cl_tissue.scanner:
+    class: %cl_tissue.adapter.class%
     factory_service: cl_tissue.adapter_registry
     factory_method: get
     arguments:

@@ -40,13 +40,11 @@ class CLTissueExtension extends Extension
      */
     private function setParameters(array $config, ContainerBuilder $container)
     {
-        if (!array_key_exists('adapter', $config)) {
-            $config['adapter'] = ['alias' => 'clamav', 'options' => []];
-        }
-
         $container->setParameter('cl_tissue.chosen_adapter_alias', $config['adapter']['alias']);
-        foreach ($config['adapter']['options'] as $key => $value) {
-            $container->setParameter(sprintf('cl_tissue.adapter.%s.%s', $config['adapter']['alias'], $key), $value);
+        if (array_key_exists('options', $config['adapter'])) {
+            foreach ($config['adapter']['options'] as $key => $value) {
+                $container->setParameter(sprintf('cl_tissue.adapter.%s.%s', $config['adapter']['alias'], $key), $value);
+            }
         }
     }
 }
