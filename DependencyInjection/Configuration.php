@@ -108,18 +108,12 @@ class Configuration implements ConfigurationInterface
         $resolver = new OptionsResolver();
         switch ($alias) {
             case 'clamav':
-                $resolver->setRequired([
-                    'bin'
-                ]);
                 $resolver->setDefaults([
-                    'bin' => '/usr/bin/clamdscan',
+                    'bin'      => '/usr/bin/clamdscan',
                     'database' => null,
                 ]);
-                $resolver->setOptional([
-                    'database',
-                ]);
                 $resolver->setAllowedTypes([
-                    'bin' => ['string'],
+                    'bin'      => ['string'],
                     'database' => ['string', 'null'],
                 ]);
                 break;
