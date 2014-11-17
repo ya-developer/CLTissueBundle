@@ -40,7 +40,6 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('adapter')
-                    ->isRequired()
                     ->beforeNormalization()
                         ->ifNull()
                         ->then(function($v) use ($self) {
