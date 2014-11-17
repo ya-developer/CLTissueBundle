@@ -50,7 +50,7 @@ class CleanFileValidator extends FileValidator
 
         $path = $value instanceof File ? $value->getPathname() : (string) $value;
 
-        if ($this->adapter->scan($path)->hasVirus()) {
+        if ($this->adapter->scan([$path])->hasVirus()) {
             if ($constraint->autoRemove) {
                 unlink($path);
             }
