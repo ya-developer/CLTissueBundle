@@ -1,6 +1,5 @@
 ## Contributing
 
-
 ### Coding standards
 
 Your code should follow [Symfony's coding standards](http://symfony.com/doc/current/contributing/code/standards.html) as close as possible.
@@ -29,17 +28,3 @@ bundle as a requirement in your package's `composer.json`:
     "cleentfaar/tissue-bundle": "~0.1"
 }
 ```
-
-#### Having your adapter included by default
-
-If you are interested in making your adapters available by default in this bundle, I'm happy to include them
-(this bundle implements `clamav` already so users don't have to set it up themselves).
-
-Note that, to make them available by default, I must ask you to take care of the following:
-    - Your code follows the coding standards mentioned above
-    - Your code follows the code conventions mentioned above
-    - You've documented what your adapter's requirements are (packages, extensions, configurations...)
-    - You've written a test for your adapter that extends the `AdapterTestCase` class (and it passes)
-
-If you still you think your adapter matches these requirements then just create an issue/PR for it on this bundle's GitHub.
-I will do my best to get it reviewed/merged as soon as possible.

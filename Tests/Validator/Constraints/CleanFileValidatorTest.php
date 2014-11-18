@@ -13,8 +13,8 @@ namespace CL\Bundle\TissueBundle\Tests\Validator\Constraints;
 
 use CL\Bundle\TissueBundle\Validator\Constraints\CleanFile;
 use CL\Bundle\TissueBundle\Validator\Constraints\CleanFileValidator;
-use CL\Tissue\Tests\Adapter\AdapterTestCase;
-use CL\Tissue\Tests\Adapter\MockAdapter;
+use CL\Tissue\Adapter\MockAdapter;
+use CL\Tissue\Tests\Adapter\AbstractAdapterTestCase;
 use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
 use Symfony\Component\Validator\Validation;
 
@@ -61,14 +61,14 @@ class CleanFileValidatorTest extends AbstractConstraintValidatorTest
 
     public function testCleanFileIsValid()
     {
-        $this->validator->validate(AdapterTestCase::getPathToCleanFile(), new CleanFile());
+        $this->validator->validate(AbstractAdapterTestCase::getPathToCleanFile(), new CleanFile());
 
         $this->assertNoViolation();
     }
 
     public function testInfectedFileIsInvalid()
     {
-        $this->validator->validate(AdapterTestCase::getPathToInfectedFile(), new CleanFile());
+        $this->validator->validate(AbstractAdapterTestCase::getPathToInfectedFile(), new CleanFile());
 
         $this->buildViolation('This file contains a virus.')->assertRaised();
     }

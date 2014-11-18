@@ -82,20 +82,6 @@ class DemoController extends Controller
                 // $permanentDir = '/path/to/permanent/storage';
                 // $uploadedFile->move($permanentDir, uniqid());
                 // $newLocation = $uploadedFile->getRealPath();
-
-                // perhaps store this file's location somewhere in your database?
-                // this example uses an entity you might have that represents a file/media
-                //
-                // $mediaEntity = new Media();
-                // $mediaEntity->setLocation($newLocation);
-                //
-                // $em = $this->getDoctrine()->getManager();
-                // $em->persist($mediaEntity);
-                // $em->flush($mediaEntity);
-
-                // we're done, let's redirect the user away from here
-                // perhaps you should give them some (flash) success-message as well?
-                return $this->redirect($this->generateUrl('cl_tissue_demo_upload_success'));
             } else {
                 // hm something funny went on, the scanner seems to think the file is infected...
                 // you'd be wise to remove this file now...

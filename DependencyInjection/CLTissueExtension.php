@@ -27,8 +27,6 @@ class CLTissueExtension extends Extension
         $config        = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('adapters.yml');
-        $loader->load('validators.yml');
         $loader->load('services.yml');
 
         $this->setParameters($config, $container);
@@ -40,11 +38,15 @@ class CLTissueExtension extends Extension
      */
     private function setParameters(array $config, ContainerBuilder $container)
     {
-        $container->setParameter('cl_tissue.chosen_adapter_alias', $config['adapter']['alias']);
-        if (array_key_exists('options', $config['adapter'])) {
-            foreach ($config['adapter']['options'] as $key => $value) {
-                $container->setParameter(sprintf('cl_tissue.adapter.%s.%s', $config['adapter']['alias'], $key), $value);
+        foreach ($config['adapter'] as $key => $val) {
+            if ($key === 'options') {
+                foreach ($val as $k => $v) {
+                    $container->setParameter(sprintf('cl_tissue.adapter.options.%s', $k), $v);
+                }
+                continue;
             }
+
+            $container->setParameter(sprintf('cl_tissue.adapter.%s', $key), $val);
         }
     }
 }

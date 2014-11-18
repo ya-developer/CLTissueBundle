@@ -40,6 +40,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('adapter')
+                    ->isRequired()
                     ->beforeNormalization()
                         ->ifNull()
                         ->then(function($v) use ($self) {
@@ -102,6 +103,11 @@ class Configuration implements ConfigurationInterface
         return $this->resolvers[$alias];
     }
 
+    /**
+     * @param string $alias
+     *
+     * @return OptionsResolver
+     */
     private function createResolver($alias)
     {
         $resolver = new OptionsResolver();

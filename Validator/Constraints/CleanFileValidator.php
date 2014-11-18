@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints\FileValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /**
- * Validates whether a value is a valid file and does not contain any viruses
+ * Validates whether a given file does not contain any viruses
  */
 class CleanFileValidator extends FileValidator
 {
