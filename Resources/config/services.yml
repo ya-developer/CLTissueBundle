@@ -1,16 +1,19 @@
 parameters:
   cl_tissue.adapter.clamav.class: CL\Tissue\Adapter\ClamAv\ClamAvAdapter
   cl_tissue.adapter.mock.class: CL\Tissue\Adapter\MockAdapter
+  cl_tissue.adapter_registry.class: CL\Tissue\Util\AdapterRegistry
   cl_tissue.validator.clean_file.class: CL\Bundle\TissueBundle\Validator\Constraints\CleanFileValidator
 
 services:
-  cl_tissue.adapter.clamav:
-    class: %cl_tissue.adapter.clamav.class%
-    arguments:
-      - %cl_tissue.adapter.options.bin%
+  cl_tissue.adapter_registry:
+    class: %cl_tissue.adapter_registry.class%
 
-  cl_tissue.adapter.mock:
+  cl_tissue.scanner:
     class: %cl_tissue.adapter.mock.class%
+    factory_service: cl_tissue.adapter_registry
+    factory_method: get
+    arguments:
+      - %cl_tissue.adapter.alias%
 
   cl_tissue.validator.clean_file:
     class: %cl_tissue.validator.clean_file.class%
