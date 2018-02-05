@@ -11,6 +11,16 @@
       "email": "info@casleentfaar.com"
     }
   ],
+  "repositories": {
+    "cleentfaar/tissue": {
+      "type": "vcs",
+      "url": "https://github.com/ya-developer/tissue"
+    },
+    "cleentfaar/tissue-clamav-adapter": {
+      "type": "vcs",
+      "url": "https://github.com/ya-developer/tissue-clamav-adapter"
+    }
+  },
   "require": {
     "php": ">=7.1",
     "symfony/framework-bundle": "~3.3",
