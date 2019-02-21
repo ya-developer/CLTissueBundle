@@ -23,9 +23,9 @@
   },
   "require": {
     "php": ">=7.1",
-    "symfony/framework-bundle": "~3.3",
-    "symfony/options-resolver": "~3.3",
-    "symfony/validator": "~3.3",
+    "symfony/framework-bundle": "~3.3|~3.4",
+    "symfony/options-resolver": "~3.3|~3.4",
+    "symfony/validator": "~3.3|~3.4",
     "cleentfaar/tissue": "dev-master",
     "cleentfaar/tissue-clamav-adapter": "dev-master"
   },
